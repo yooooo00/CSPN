@@ -1,6 +1,6 @@
 #!/bin/bash
 # use this only for local usage
-export CUDA_VISIBLE_DEVICES=2
+# export CUDA_VISIBLE_DEVICES=2
 
 data_set="nyudepth"
 n_sample=500
