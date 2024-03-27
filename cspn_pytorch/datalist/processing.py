@@ -31,14 +31,13 @@ print('\n')
 with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
     next(file)
     links=[]
-    total=len(file.readlines())
     totalcount=0
     count=0
     for line in file:
         links.append(base_url+line.strip().split('/')[-2]+'/'+line.strip().split('/')[-1])
         count+=1
         totalcount+=1
-        print(f"\r{(totalcount/total)*100:.2f}%,{totalcount}/{total}",end='')
+        print(f"\r已完成{totalcount}，当前{line.strip()}",end='')
         if count>=1000:
             download_files(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
             # print(count,end='\r')
