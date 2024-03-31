@@ -23,7 +23,7 @@ def download_files_using_threads(links, save_dir):
     with ThreadPoolExecutor(max_workers=100) as executor:  # 控制同时进行下载的线程数
         for link in links:
             save_path=Path(save_dir)/link.split('/')[-2]/link.split('/')[-1]
-            print(link)
+            print(link,end='\r')
             executor.submit(download_file, link, save_path)
 
 def url_to_filepath(url):
@@ -38,8 +38,8 @@ print('\n')
 with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
     next(file)
     links=[]
-    totalcount=0
-    count=0
+    # totalcount=0
+    # count=0
     for line in file:
         links.append(filepath_to_url(line.strip()))
     #     count+=1
@@ -52,7 +52,7 @@ with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
     #         links=[]
     #         pass    
     download_files_using_threads(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
-    print(f"\n{totalcount}完成")
+    print(f"\n完成")
 
     
 
