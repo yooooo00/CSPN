@@ -15,6 +15,8 @@ def download_file(link, save_path):
     if response.status_code == 200:
         with open(save_path, 'wb') as f:
             f.write(response.content)
+    else:
+        print(f"\r{filename} Failed")
 
 def download_files_using_threads(links, save_dir):
     if not os.path.exists(save_dir):
@@ -31,11 +33,12 @@ def url_to_filepath(url):
     return filepath
 
 def filepath_to_url(filepath):
+    # link=base_url+line.strip().split(sep='/')[-2]+'/'+line.strip().split('/')[-1]
     url ='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'+Path(filepath).parent.name+'/'+Path(filepath).name
     return url
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 print('\n')
-with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
+with open('./nyudepth_hdf5_train.csv','r') as file:
     next(file)
     links=[]
     # totalcount=0
@@ -51,7 +54,7 @@ with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
     #         count=0
     #         links=[]
     #         pass    
-    download_files_using_threads(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
+    download_files_using_threads(links=links,save_dir='../data/nyudepth_hdf5/train')
     print(f"\n完成")
 
     

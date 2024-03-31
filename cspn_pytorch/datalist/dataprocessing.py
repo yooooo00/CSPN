@@ -13,7 +13,7 @@ def check_if_dataset_file_exists_online(filepath):
     with open(filepath,'r') as file:
         next(file)
         for line in file:
-            link=base_url+line.strip().split('/')[-2]+'/'+line.strip().split('/')[-1]
+            link=base_url+line.strip().split(sep='/')[-2]+'/'+line.strip().split('/')[-1]
             response=requests.head(link)
             if response.status_code!=200:
                 print(f"{count}/{total}:{line.strip()},False        ",end='\r')
