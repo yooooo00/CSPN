@@ -40,7 +40,7 @@ def choose_dataset_part(full_path,target_path):
         for line in full_file:
             target_file.write(line)
             count_line+=1
-            if count_line>=50000:break
+            if count_line>=10000:break
 
 
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
