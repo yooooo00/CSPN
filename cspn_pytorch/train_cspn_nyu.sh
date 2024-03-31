@@ -4,7 +4,7 @@
 
 data_set="nyudepth"
 n_sample=500
-train_list="datalist/nyudepth_hdf5_train.csv"
+train_list="datalist/nyudepth_hdf5_train_new.csv"
 eval_list="datalist/nyudepth_hdf5_val.csv"
 model="cspn_unet"
 
