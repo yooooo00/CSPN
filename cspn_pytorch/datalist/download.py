@@ -62,7 +62,7 @@ def download_csv_dataset(csv_path):
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 
 if __name__=="__name__":
-    download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_train_new.csv')
+    download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_train_test.csv')
 
 
 
