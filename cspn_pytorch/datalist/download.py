@@ -7,7 +7,7 @@ from threading import Lock
 count_downloaded=0
 count_failed=0
 total=0
-# lock=Lock()
+lock=Lock()
 
 def download_file(link, save_path):
     global count_downloaded,count_failed,total
@@ -18,12 +18,12 @@ def download_file(link, save_path):
     if response.status_code == 200:
         with open(save_path, 'wb') as f:
             f.write(response.content)
-    print(f"\rDownloaded/Failed/Total:{count_downloaded}/{count_failed}/{total},{filename}",end='        ')
-    # with lock:
-    if response.status_code==200:
-        count_downloaded+=1
-    else:
-        count_failed+=1
+    with lock:
+        if response.status_code==200:
+            count_downloaded+=1
+        else:
+            count_failed+=1
+        print(f"\rDownloaded/Failed/Total:{count_downloaded}/{count_failed}/{total},{filename}",end='        ')
 
 def download_files_using_threads(links, save_dir):
     if not os.path.exists(save_dir):
