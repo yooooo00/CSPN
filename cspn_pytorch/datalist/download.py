@@ -47,7 +47,8 @@ def filepath_to_url(filepath):
 
 
 def download_csv_dataset(csv_path):
-    global total
+    global total,count_downloaded,count_failed
+    count_downloaded,count_failed=0,0
     total=len(open(csv_path,'r').readlines())-1
     with open(csv_path,'r') as file:
         next(file)
@@ -61,6 +62,6 @@ def download_csv_dataset(csv_path):
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 
 download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_train_test.csv')
-
+download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_val_test.csv')
 
 
