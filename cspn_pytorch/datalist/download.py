@@ -34,7 +34,6 @@ def download_files_using_threads(links, save_dir):
     with ThreadPoolExecutor(max_workers=100) as executor:  # 控制同时进行下载的线程数
         for link in links:
             save_path=Path(save_dir)/link.split('/')[-2]/link.split('/')[-1]
-            print(f"\r{link}",end='          ')
             executor.submit(download_file, link, save_path)
 
 def url_to_filepath(url):
@@ -61,8 +60,7 @@ def download_csv_dataset(csv_path):
 
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 
-if __name__=="__name__":
-    download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_train_test.csv')
+download_csv_dataset(Path(__file__).parent/'nyudepth_hdf5_train_test.csv')
 
 
 
