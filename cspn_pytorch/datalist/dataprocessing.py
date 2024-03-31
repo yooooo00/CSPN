@@ -36,11 +36,11 @@ def choose_dataset_part(full_path,target_path):
         next(full_file)
         target_file.write('Name\n')
         count_line=0
-        for i in range(80000):next(full_file)
+        # for i in range(80000):next(full_file)
         for line in full_file:
             target_file.write(line)
             count_line+=1
-            if count_line>=1000:break
+            if count_line>=50000:break
 
 
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
@@ -49,4 +49,4 @@ new_file_path=Path(__file__).parent/'nyudepth_hdf5_train_new.csv'
 val_file_path=Path(__file__).parent/'nyudepth_hdf5_val_test.csv'
 
 # check_if_dataset_file_exists_online(new_file_path)
-choose_dataset_part(new_file_path,val_file_path)
+choose_dataset_part(new_file_path,test_file_path)
