@@ -31,7 +31,7 @@ def url_to_filepath(url):
     return filepath
 
 def filepath_to_url(filepath):
-    url = 'http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'+Path(filepath).parent+'/'+Path(filepath).name
+    url ='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'+Path(filepath).parent.name+'/'+Path(filepath).name
     return url
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 print('\n')
