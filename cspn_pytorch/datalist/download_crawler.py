@@ -25,24 +25,35 @@ def get_filenames_from_directory(url):
     return urls
 
 import random
-
-def write_paths_to_file(url,file_path):
+def get_all_files_urls(url):
     urls=get_filenames_from_directory(url)
     all_h5_urls=[]
     for url in urls:
         print(url)
         h5_urls=get_filenames_from_directory(url)
         all_h5_urls.extend(h5_urls)
-    all_h5_urls=random.choice(all_h5_urls)
-    with open(file_path,"w") as file:
-        for url in all_h5_urls:
-            content='data/nyudepth_hdf5/train/'+url.split('/')[-3]+'/'+url.split('/')[-2]
-            file.write(content+'\n')
-            print(content)
+    random.shuffle(all_h5_urls)
+    return all_h5_urls
+
+
+# def write_paths_to_file(url,file_path):
+#     urls=get_filenames_from_directory(url)
+#     all_h5_urls=[]
+#     for url in urls:
+#         print(url)
+#         h5_urls=get_filenames_from_directory(url)
+#         all_h5_urls.extend(h5_urls)
+
+
 
 url = 'http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'  # Apache服务器目录的URL
 file_to_write = './nyudepth_hdf5_train_new.csv'
 
 with open(file_to_write,"w") as file:
     file.write("Name\n")
-write_paths_to_file(url,file_to_write)
+
+with open(file_to_write,"w") as file:
+    for url in get_all_files_urls(url):
+        content='data/nyudepth_hdf5/train/'+url.split('/')[-3]+'/'+url.split('/')[-2]
+        file.write(content+'\n')
+        print(content)
