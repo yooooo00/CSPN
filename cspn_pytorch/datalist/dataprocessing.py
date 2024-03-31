@@ -16,9 +16,9 @@ with open(old_file_path,'r') as file,open(new_file_path,'w') as newfile:
         link=base_url+line.strip().split('/')[-2]+'/'+line.strip().split('/')[-1]
         response=requests.get(link)
         if response.status_code!=200:
-            print(f"{count}/{total}:{line.strip()},False",end='\r')
+            print(f"{count}/{total}:{line.strip()},False        ",end='\r')
             continue
         else:
             newfile.write(line)
-            print(f"{count}/{total}:{line.strip()},True",end='\r')
+            print(f"{count}/{total}:{line.strip()},True        ",end='\r')
 

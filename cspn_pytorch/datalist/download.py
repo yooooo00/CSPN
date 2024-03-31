@@ -16,7 +16,7 @@ def download_file(link, save_path):
         with open(save_path, 'wb') as f:
             f.write(response.content)
 
-def download_files(links, save_dir):
+def download_files_using_threads(links, save_dir):
     if not os.path.exists(save_dir):
         print('路径不对')
         return
@@ -39,12 +39,13 @@ with open(Path(__file__).parent/'nyudepth_hdf5_train.csv','r') as file:
         totalcount+=1
         print(f"\r已完成{totalcount}，当前{line.strip()}",end='')
         if count>=1000:
-            download_files(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
+            download_files_using_threads(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
             # print(count,end='\r')
             count=0
             links=[]
             pass
-    download_files(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
+    
+    download_files_using_threads(links=links,save_dir=Path(__file__).parent.parent/'data/nyudepth_hdf5/train')
     print(f"\n{totalcount}完成")
 
     
