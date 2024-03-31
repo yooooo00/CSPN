@@ -38,7 +38,7 @@ def filepath_to_url(filepath):
     return url
 base_url='http://datasets.lids.mit.edu/nyudepthv2/nyudepthv2_noskip/val_full/'
 print('\n')
-with open('./nyudepth_hdf5_train.csv','r') as file:
+with open('nyudepth_hdf5_train_new.csv','r') as file:
     next(file)
     links=[]
     # totalcount=0
