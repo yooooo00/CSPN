@@ -78,7 +78,7 @@ class NyuDepthDataset(Dataset):
             return None
         
         _s = np.random.uniform(1.0, 1.5)
-        s = np.int(240*_s)
+        s = int(240*_s)
         degree = np.random.uniform(-5.0, 5.0)
         if self.split == 'train':
             tRgb = data_transform.Compose([transforms.Resize(s),

@@ -29,7 +29,7 @@ def download_files_using_threads(links, save_dir):
     if not os.path.exists(save_dir):
         print('路径不对')
         return
-    with ThreadPoolExecutor(max_workers=200) as executor:  # 控制同时进行下载的线程数
+    with ThreadPoolExecutor(max_workers=100) as executor:  # 控制同时进行下载的线程数
         for link in links:
             save_path=Path(save_dir)/link.split('/')[-2]/link.split('/')[-1]
             executor.submit(download_file, link, save_path)
