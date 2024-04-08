@@ -87,16 +87,26 @@ start_epoch = 0 # start from epoch 0 or last checkpoint epoch
 print('==> Preparing data..')
 if args.data_set=='nyudepth':
     import nyu_dataset_loader as dataset_loader
+    # trainset = dataset_loader.NyuDepthDataset(csv_file=args.train_list,
+    #                                           root_dir='.',
+    #                                           split = 'train',
+    #                                           n_sample = args.n_sample,
+    #                                           input_format='hdf5')
+    # valset = dataset_loader.NyuDepthDataset(csv_file=args.eval_list,
+    #                                         root_dir='.',
+    #                                         split = 'val',
+    #                                         n_sample = args.n_sample,
+    #                                         input_format='hdf5')
     trainset = dataset_loader.NyuDepthDataset(csv_file=args.train_list,
-                                              root_dir='.',
+                                              root_dir='/',
                                               split = 'train',
                                               n_sample = args.n_sample,
-                                              input_format='hdf5')
+                                              input_format='png')
     valset = dataset_loader.NyuDepthDataset(csv_file=args.eval_list,
-                                            root_dir='.',
+                                            root_dir='/',
                                             split = 'val',
                                             n_sample = args.n_sample,
-                                            input_format='hdf5')
+                                            input_format='png')
 elif args.data_set =='kitti':
     import kitti_dataset_loader as dataset_loader
     trainset = dataset_loader.KittiDataset(csv_file=args.train_list,
@@ -109,6 +119,7 @@ elif args.data_set =='kitti':
                                          split = 'val',
                                          n_sample = args.n_sample,
                                          input_format='hdf5')
+
 else:
     print("==> input unknow dataset..")
 

@@ -64,6 +64,16 @@ class NyuDepthDataset(Dataset):
             rgb_h5, depth_h5 = self.load_h5(file_name)
             rgb_image = Image.fromarray(rgb_h5, mode='RGB')
             depth_image = Image.fromarray(depth_h5.astype('float32'), mode='F')
+        elif self.input_format == 'png':
+            rgb_name = os.path.join(self.root_dir,
+                    os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center/image_02",
+                                 self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
+            with open(rgb_name, 'rb') as fRgb:
+                rgb_image = Image.open(rgb_name).convert('RGB')
+            
+            depth_name = os.path.join(self.root_dir,
+                        os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center_CREStereo",
+                                     self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
         else:
             print('error: the input format is not supported now!')
             return None
