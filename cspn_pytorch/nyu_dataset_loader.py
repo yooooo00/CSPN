@@ -75,13 +75,13 @@ class NyuDepthDataset(Dataset):
 #            show_img(depth_image)
         elif self.input_format == 'png':
             rgb_name = os.path.join(self.root_dir,
-                    os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center/image_02",
+                    os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center/Depth-Anything_image_02/",
                                  self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             with open(rgb_name, 'rb') as fRgb:
                 rgb_image = Image.open(rgb_name).convert('RGB')
             
             depth_name = os.path.join(self.root_dir,
-                        os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center_CREStereo",
+                        os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/output_CREStereo",
                                      self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             with open(depth_name, 'rb') as fDepth:
                 depth_image = Image.open(depth_name)

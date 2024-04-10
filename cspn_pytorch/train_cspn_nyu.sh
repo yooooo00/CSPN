@@ -9,7 +9,7 @@ eval_list="datalist/png_val_test.csv"
 model="cspn_unet"
 
 batch_size_train=8
-num_epoch_train=40
+num_epoch_train=1
 batch_size_eval=1
 model_name=nyu_pretrain_cspn_1_net_cp500_bs8_adlr_ep40_8norm
 save_dir="output/${model_name}"
