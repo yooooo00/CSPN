@@ -66,15 +66,27 @@ class NyuDepthDataset(Dataset):
             depth_image = Image.fromarray(depth_h5.astype('float32'), mode='F')
         elif self.input_format == 'png':
             rgb_name = os.path.join(self.root_dir,
-                    os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center/Depth-Anything_image_02/",
+                    os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_02/Depth-Anything_image_02",
                                  self.rgbd_frame.iloc[idx, 0].split('/')[-1].split('.')[0]+'_depth.png'))
+            # rgb_name = os.path.join(self.root_dir,
+            #         os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_center/image_02",
+            #                      self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             with open(rgb_name, 'rb') as fRgb:
                 rgb_image = Image.open(rgb_name).convert('RGB')
             
+            # depth_name = os.path.join(self.root_dir,
+            #             os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/output_CREStereo",
+            #                          self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             depth_name = os.path.join(self.root_dir,
-                        os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/output_CREStereo",
+                        os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/output_CREStereo_full",
                                      self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
-            depth_image=Image.open(depth_name)
+            with open(depth_name, 'rb') as fDepth:
+                depth_image = Image.open(depth_name).convert('L')
+
+            gt_name=os.path.join(self.root_dir,
+                        os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_02/groundtruth",
+                                     self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
+            gt_image=Image.open(gt_name).convert('L')
         else:
             print('error: the input format is not supported now!')
             return None
@@ -124,16 +136,21 @@ class NyuDepthDataset(Dataset):
             rgb_raw = tDepth(rgb_image)
             rgb_image = tRgb(rgb_image)
             depth_image = tDepth(depth_image)
+            gt_image = tDepth(gt_image)
             rgb_image = transforms.ToTensor()(rgb_image)
             rgb_raw = transforms.ToTensor()(rgb_raw)
             if self.input_format == 'img':
                 depth_image = transforms.ToTensor()(depth_image)
+                gt_image = transforms.ToTensor()(gt_image)
             else:
                 depth_image = data_transform.ToTensor()(depth_image)
-            sparse_image = self.createSparseDepthImage(depth_image, self.n_sample)
+                gt_image = data_transform.ToTensor()(gt_image)
+            # sparse_image = self.createSparseDepthImage(depth_image, self.n_sample)
+            sparse_image=depth_image
             rgbd_image = torch.cat((rgb_image, sparse_image), 0)
 
-            sample = {'rgbd': rgbd_image, 'depth': depth_image, 'raw_rgb': rgb_raw }
+            # sample = {'rgbd': rgbd_image, 'depth': depth_image, 'raw_rgb': rgb_raw }
+            sample = {'rgbd': rgbd_image, 'depth': gt_image, 'raw_rgb': rgb_raw }
 
         return sample
 

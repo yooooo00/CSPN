@@ -75,16 +75,33 @@ class NyuDepthDataset(Dataset):
 #            show_img(depth_image)
         elif self.input_format == 'png':
             rgb_name = os.path.join(self.root_dir,
-                    os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/image_center/Depth-Anything_image_02/",
+                    os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_02/Depth-Anything_image_02",
                                  self.rgbd_frame.iloc[idx, 0].split('/')[-1].split('.')[0]+'_depth.png'))
+            # rgb_name = os.path.join(self.root_dir,
+            #         os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_center/image_02",
+            #                      self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             with open(rgb_name, 'rb') as fRgb:
                 rgb_image = Image.open(rgb_name).convert('RGB')
             
+            # depth_name = os.path.join(self.root_dir,
+            #             os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/output_CREStereo",
+            #                          self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             depth_name = os.path.join(self.root_dir,
-                        os.path.join("/content/drive/MyDrive/Colab Notebooks/data/kitti/2011_10_03_drive_0027_sync/output_CREStereo",
+                        os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/output_CREStereo_full",
                                      self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
             with open(depth_name, 'rb') as fDepth:
-                depth_image = Image.open(depth_name)
+                depth_image = Image.open(depth_name).convert('L')
+
+            gt_name=os.path.join(self.root_dir,
+                        os.path.join("/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_02/groundtruth",
+                                     self.rgbd_frame.iloc[idx, 0].split('/')[-1]))
+            gt_image=Image.open(gt_name).convert('L')
+            plt.imshow(gt_image)
+            plt.show()
+            # plt.imshow(depth_name)
+            # plt.show()
+            # plt.imshow(rgb_name)
+            # plt.show()
         else:
             print('error: the input format is not supported now!')
             return None
@@ -107,17 +124,23 @@ class NyuDepthDataset(Dataset):
                                              transforms.CenterCrop((228, 304))])
             rgb_image = tRgb(rgb_image)
             depth_image = tDepth(depth_image)
+            gt_image=tDepth(gt_image)
             if np.random.uniform()<0.5:
                 rgb_image = rgb_image.transpose(Image.FLIP_LEFT_RIGHT)
                 depth_image = depth_image.transpose(Image.FLIP_LEFT_RIGHT)
+                gt_image = gt_image.transpose(Image.FLIP_LEFT_RIGHT)
             
             rgb_image = transforms.ToTensor()(rgb_image)
             if self.input_format == 'img':
                 depth_image = transforms.ToTensor()(depth_image)
+                gt_image = transforms.ToTensor()(gt_image)
             else:
                 depth_image = data_transform.ToTensor()(depth_image)
-            depth_image = depth_image.div(_s)           
-            sparse_image = self.createSparseDepthImage(depth_image, self.n_sample)
+                gt_image = data_transform.ToTensor()(gt_image)
+            depth_image = depth_image.div(_s)  
+            gt_image = gt_image.div(_s)         
+            # sparse_image = self.createSparseDepthImage(depth_image, self.n_sample)
+            sparse_image=depth_image
             rgbd_image = torch.cat((rgb_image, sparse_image), 0)
 
 
@@ -132,28 +155,38 @@ class NyuDepthDataset(Dataset):
                                              transforms.CenterCrop((228, 304))])            
             rgb_image = tRgb(rgb_image)
             depth_image = tDepth(depth_image)
+            gt_image = tDepth(gt_image)
             rgb_image = transforms.ToTensor()(rgb_image)
             if self.input_format == 'img':
                 depth_image = transforms.ToTensor()(depth_image)
+                gt_image = transforms.ToTensor()(gt_image)
             else:
                 depth_image = data_transform.ToTensor()(depth_image)
+                gt_image = data_transform.ToTensor()(gt_image)
             sparse_image = self.createSparseDepthImage(depth_image, self.n_sample)
             rgbd_image = torch.cat((rgb_image, sparse_image), 0)
             
-        sample = {'rgbd': rgbd_image, 'depth': depth_image }
-        
+        # sample = {'rgbd': rgbd_image, 'depth': depth_image }
+        sample = {'rgbd': rgbd_image, 'depth': gt_image }
+        # plt.imshow(transforms.ToPILImage()(gt_image))
+        # plt.imshow(transforms.ToPILImage()(rgb_image))
+        # plt.imshow(transforms.ToPILImage()(sparse_image))
+        # plt.show()
         return sample
     
     def createSparseDepthImage(self, depth_image, n_sample):
-        random_mask = torch.zeros(1, depth_image.size(1), depth_image.size(2))
-        n_pixels = depth_image.size(1) * depth_image.size(2)
-        n_valid_pixels = torch.sum(depth_image>0.0001)
-#        print('===> number of total pixels is: %d\n' % n_pixels)
-#        print('===> number of total valid pixels is: %d\n' % n_valid_pixels)
-        perc_sample = n_sample/n_pixels
-        random_mask = torch.bernoulli(torch.ones_like(random_mask)*perc_sample)
-        sparse_depth = torch.mul(depth_image, random_mask)
-        return sparse_depth
+#         random_mask = torch.zeros(1, depth_image.size(1), depth_image.size(2))
+#         n_pixels = depth_image.size(1) * depth_image.size(2)
+#         n_valid_pixels = torch.sum(depth_image>0.0001)
+# #        print('===> number of total pixels is: %d\n' % n_pixels)
+# #        print('===> number of total valid pixels is: %d\n' % n_valid_pixels)
+#         perc_sample = n_sample/n_pixels
+#         random_mask = torch.bernoulli(torch.ones_like(random_mask)*perc_sample)
+#         sparse_depth = torch.mul(depth_image, random_mask)
+
+#         return sparse_depth
+        return depth_image # 改为直接用整个depth_image 不再取点模拟
+        
 
     def load_h5(self, h5_filename):
         f = h5py.File(h5_filename, 'r')

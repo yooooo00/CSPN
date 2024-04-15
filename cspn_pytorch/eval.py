@@ -73,10 +73,10 @@ assert args.data_set in ['nyudepth', 'kitti']
 if args.data_set=='nyudepth':
     import eval_nyu_dataset_loader as dataset_loader
     valset = dataset_loader.NyuDepthDataset(csv_file=args.eval_list,
-                                            root_dir='.',
+                                            root_dir='/home/ewing/dataset/kitti_test/data/2011_10_03_drive_0027_sync/image_center/image_02',
                                             split = 'val',
                                             n_sample = args.n_sample,
-                                            input_format='hdf5')
+                                            input_format='png')
 elif args.data_set =='kitti':
     import eval_kitti_dataset_loader as dataset_loader
     valset = dataset_loader.KittiDataset(csv_file=args.eval_list,

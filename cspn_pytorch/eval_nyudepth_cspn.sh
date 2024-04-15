@@ -3,7 +3,7 @@
 
 data_set="nyudepth"
 n_sample=500
-eval_list="datalist/nyudepth_hdf5_val.csv"
+eval_list="datalist/png_val_test.csv"
 model="cspn_unet"
 batch_size_eval=1
 
